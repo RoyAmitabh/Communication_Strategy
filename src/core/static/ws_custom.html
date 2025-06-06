@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Collaborative Editor (WebSocket)</title>
+</head>
+<body>
+  <h2>WebSocket Collaborative Editor</h2>
+  <textarea id="editor" rows="10" cols="80"></textarea>
+  <script>
+    const editor = document.getElementById("editor");
+    const ws = new WebSocket("ws://" + location.host + "/ws/editor");
+
+    ws.onmessage = (event) => {
+      editor.value = event.data;
+    };
+
+    editor.addEventListener("input", () => {
+      ws.send(editor.value);
+    });
+  </script>
+</body>
+</html>
