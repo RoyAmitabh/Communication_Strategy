@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Collaborative Editor (Polling)</title>
+</head>
+<body>
+  <h2>Polling-Based Collaborative Editor</h2>
+  <textarea id="editor" rows="10" cols="80"></textarea>
+  <script>
+    const editor = document.getElementById("editor");
+
+    async function fetchText() {
+      const response = await fetch("/text");
+      const data = await response.json();
+      editor.value = data.text;
+    }
+
+    async function postText() {
+      await fetch("/text", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: editor.value }),
+      });
+    }
+
+    editor.addEventListener("input", () => {
+      postText();
+    });
+
+    setInterval(fetchText, 2000); // Poll every 2s
+  </script>
+</body>
+</html>
